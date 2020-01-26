@@ -1,10 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BallScript : MonoBehaviour
 {
+    public Canvas pause;
     public float power;
+    public Text Text;
+    private bool isEnd = false;
+    
 
     private Rigidbody Rigidbody;
 
@@ -36,8 +41,46 @@ public class BallScript : MonoBehaviour
         {
             Rigidbody.AddForce(0, 0, power); //move back
         }
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (pause.gameObject.active)
+            {
+                resume();
+            }
+            else
+            {
+                stop();
+            }
+        }
     }
 
+    public void resume()
+    {
+        if(isEnd)
+            return;
+        Time.timeScale = 1;
+        pause.gameObject.active = false;
+    }
+
+    public void stop()
+    {
+        Time.timeScale = 0;
+        pause.gameObject.active = true;
+    }
+
+    private void lose()
+    {
+        stop();
+        Text.text = "you lose!";
+        isEnd = true;
+    }
+
+    private void win()
+    {
+        stop();
+        isEnd = true;
+        Text.text = "you win!";
+    }
     private void OnCollisionEnter(Collision other)
     {
         string enemy = null;
@@ -52,12 +95,12 @@ public class BallScript : MonoBehaviour
 
         if (other.gameObject.tag.Equals(enemy))
         {
-            Debug.Log("Lose!");
+            lose();
         }
 
         if (other.gameObject.tag.Equals("finish"))
         {
-            Debug.Log("win!");            
+            win();            
         }
     }
 }
