@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BallScript : MonoBehaviour
@@ -9,6 +11,7 @@ public class BallScript : MonoBehaviour
     public float power;
     public Text Text;
     private bool isEnd = false;
+    public Material secondMaterial;
     
 
     private Rigidbody Rigidbody;
@@ -68,6 +71,12 @@ public class BallScript : MonoBehaviour
         pause.gameObject.active = true;
     }
 
+    public void restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1;
+    }
+
     private void lose()
     {
         stop();
@@ -102,5 +111,11 @@ public class BallScript : MonoBehaviour
         {
             win();            
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        this.GetComponent<MeshRenderer>().material = secondMaterial;
+        this.tag = "Blue";
     }
 }
