@@ -7,6 +7,7 @@ public class BallScript : MonoBehaviour
     public float power;
 
     private Rigidbody Rigidbody;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,20 +19,45 @@ public class BallScript : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.A))
         {
-            Rigidbody.AddForce(power, 0, 0);  //move left
+            Rigidbody.AddForce(power, 0, 0); //move left
         }
+
         if (Input.GetKey(KeyCode.D))
         {
             Rigidbody.AddForce(-power, 0, 0); //move right
         }
+
         if (Input.GetKey(KeyCode.W))
         {
             Rigidbody.AddForce(0, 0, -power); //move forward
         }
+
         if (Input.GetKey(KeyCode.S))
         {
             Rigidbody.AddForce(0, 0, power); //move back
         }
-        
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        string enemy = null;
+        if (tag.Equals("Red"))
+        {
+            enemy = "Blue";
+        }
+        if(tag.Equals("Blue"))
+        {
+            enemy = "Red";
+        }
+
+        if (other.gameObject.tag.Equals(enemy))
+        {
+            Debug.Log("Lose!");
+        }
+
+        if (other.gameObject.tag.Equals("finish"))
+        {
+            Debug.Log("win!");            
+        }
     }
 }
