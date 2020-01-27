@@ -67,8 +67,8 @@ public class BallScript : MonoBehaviour
 
     public void stop()
     {
-        Time.timeScale = 0;
         pause.gameObject.active = true;
+        Time.timeScale = 0;
     }
 
     public void restart()
@@ -82,6 +82,13 @@ public class BallScript : MonoBehaviour
         stop();
         Text.text = "you lose!";
         isEnd = true;
+        try
+        {
+            GetComponent<AudioSource>().Play();
+        }
+        catch (Exception e)
+        {
+        }
     }
 
     private void win()
@@ -89,6 +96,19 @@ public class BallScript : MonoBehaviour
         stop();
         isEnd = true;
         Text.text = "you win!";
+        Debug.Log(SceneManager.GetActiveScene().name);
+        if (SceneManager.GetActiveScene().name.Equals("level1"))
+        {
+            Time.timeScale = 1;
+            Invoke("loadLevel2",1f);
+            Debug.Log("invoke");
+        }
+    }
+
+    void loadLevel2()
+    {
+        Debug.Log("loadLevel2");
+        SceneManager.LoadScene("level2");
     }
     private void OnCollisionEnter(Collision other)
     {
